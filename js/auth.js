@@ -1,21 +1,27 @@
-document.getElementById("loginForm").addEventListener("submit", function(e) {
+import { findUser } from "./users.js";
+
+document.getElementById("loginForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-  // Dummy users
-  const users = [
-    { email: "admin@test.com", password: "1234", role: "admin" },
-    { email: "user@test.com", password: "1234", role: "user" }
-  ];
+  // 🔍 Find user from storage
+  const user = findUser(email);
 
-  const user = users.find(u => u.email === email && u.password === password);
-
-  if (user) {
-    localStorage.setItem("user", JSON.stringify(user));
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Invalid login");
+  // ❌ User not found
+  if (!user) {
+    alert("User not found");
+    return;
   }
+
+  // ❌ Wrong password
+  if (user.password !== password) {
+    alert("Invalid password");
+    return;
+  }
+
+  // ✅ Success
+  localStorage.setItem("user", JSON.stringify(user));
+  window.location.href = "dashboard.html";
 });

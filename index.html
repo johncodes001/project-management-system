@@ -28,6 +28,11 @@
 
 </div>
 
-<script src="js/auth.js"></script>
+<script type="module">
+  import { seedUsers } from "./js/users.js";
+  seedUsers();
+</script>
+
+<script type="module" src="js/auth.js"></script>
 </body>
 </html>

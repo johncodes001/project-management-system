@@ -8,21 +8,50 @@
 </head>
 <body>
 
-<div class="main-container">
-  <h1 id="projectTitle"></h1>
+<div class="app-layout">
 
-  <div class="tabs">
-    <button onclick="openTab('onpage')">On-Page</button>
-    <button onclick="openTab('offpage')">Off-Page</button>
-    <button onclick="openTab('content')">Website Content</button>
-    <button onclick="openTab('blogs')">Blogs</button>
-    <button onclick="openTab('general')">General</button>
-    <button onclick="openTab('stats')">Stats</button>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>SM Projects DB</h2>
+    <p class="role-text">USER</p>
+
+    <ul class="menu">
+      <li class="active" onclick="goToDashboard()">Projects</li>
+      <li>Users</li>
+      <li>Activity Logs</li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <p>Logged in as</p>
+      <strong id="userEmail"></strong>
+      <button onclick="logout()">Logout</button>
+    </div>
   </div>
 
-  <div id="tabContent"></div>
+  <!-- Main Content -->
+  <div class="main-content">
 
-  <button onclick="goBack()">⬅ Back</button>
+    <div class="main-container">
+
+      <h1 id="projectTitle"></h1>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button onclick="openTab('onpage')">On-Page</button>
+        <button onclick="openTab('offpage')">Off-Page</button>
+        <button onclick="openTab('content')">Website Content</button>
+        <button onclick="openTab('blogs')">Blogs</button>
+        <button onclick="openTab('general')">General</button>
+        <button onclick="openTab('stats')">Stats</button>
+      </div>
+
+      <!-- Tab Content -->
+      <div id="tabContent"></div>
+
+    </div>
+
+  </div>
+
 </div>
 
 <script src="js/project.js"></script>

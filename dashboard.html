@@ -2,17 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard</title>
+  <title>Project Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
 
-<h1>Dashboard</h1>
+<div class="app-layout">
 
-<button id="addProjectBtn" onclick="addProject()">+ Add Project</button>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>SM Projects DB</h2>
+    <p class="role-text">ADMIN</p>
 
-<div id="projectList"></div>
+    <ul class="menu">
+      <li class="active">Projects</li>
+      <li>Users</li>
+      <li>Activity Logs</li>
+    </ul>
 
+    <div class="sidebar-footer">
+      <p>Logged in as</p>
+      <strong id="userEmail"></strong>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <div class="main-container">
+
+      <div class="dashboard-header">
+        <div>
+          <h1>All Projects</h1>
+          <p id="projectCount"></p>
+        </div>
+
+        <div class="header-actions">
+          <input type="text" id="searchInput" placeholder="Search projects..." oninput="searchProjects()">
+          <button id="addProjectBtn">+ Create Project</button>
+        </div>
+      </div>
+
+      <div id="projectList" class="project-grid"></div>
+
+    </div>
+
+  </div>
+
+</div>
 <script>
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -30,52 +69,49 @@ function openProject(index) {
 }
 
 // Render projects
-function renderProjects() {
+function renderProjects(filteredProjects = projects) {
   const container = document.getElementById("projectList");
   container.innerHTML = "";
 
-  projects.forEach((project, index) => {
+  let visibleCount = 0;
 
-    // USER can only see assigned projects
+  filteredProjects.forEach((project) => {
+    const realIndex = projects.indexOf(project);
+
+    // Role filtering
     if (user.role === "user" && project.assignedTo !== user.email) {
       return;
     }
 
+    visibleCount++;
+
     const div = document.createElement("div");
     div.className = "project-card";
 
+    const assignedUser = JSON.parse(localStorage.getItem("users"))?.find(u => u.email === project.assignedTo);
+    const assignedName = assignedUser ? assignedUser.name : project.assignedTo;
+
     div.innerHTML = `
-      <strong>${project.name}</strong>
-      <p>Assigned to: ${project.assignedTo}</p>
-      ${user.role === "admin" ? `<button onclick="deleteProject(${index}); event.stopPropagation();">Delete</button>` : ""}
+      <div class="card-header">
+        <span class="folder-icon">📁</span>
+        <div class="card-actions">
+          ${user.role === "admin" ? `<button onclick="deleteProject(${realIndex}); event.stopPropagation();">🗑️</button>` : ""}
+        </div>
+      </div>
+
+      <h3>${project.name}</h3>
+      <p>No description</p>
+      <small>Assigned to: ${assignedName}</small>
     `;
 
-    // 🔥 Click card to open project
-    div.onclick = () => openProject(index);
+    div.onclick = () => openProject(realIndex);
 
     container.appendChild(div);
   });
-}
 
-// Admin-only: Add project
-function addProject() {
-  if (user.role !== "admin") {
-    alert("Only admin can create projects");
-    return;
-  }
-
-  const name = prompt("Enter project name:");
-  const assignedTo = prompt("Assign to (user email):");
-
-  if (!name || !assignedTo) return;
-
-  projects.push({
-    name: name,
-    assignedTo: assignedTo
-  });
-
-  localStorage.setItem("projects", JSON.stringify(projects));
-  renderProjects();
+  // ✅ Correct project count (after filtering)
+  document.getElementById("projectCount").innerText =
+    `${visibleCount} total projects`;
 }
 
 // Admin-only: Delete
@@ -87,14 +123,44 @@ function deleteProject(index) {
   renderProjects();
 }
 
-// Hide button for users
+// 🔍 Search Projects (role-aware)
+function searchProjects() {
+  const searchValue = document.getElementById("searchInput").value.toLowerCase();
+
+  const filtered = projects.filter(project => {
+    const matchesSearch = project.name.toLowerCase().includes(searchValue);
+
+    if (user.role === "user" && project.assignedTo !== user.email) {
+      return false;
+    }
+
+    return matchesSearch;
+  });
+
+  renderProjects(filtered);
+}
+
+// Initial load
 window.onload = function () {
+  // Hide button for non-admin
   if (user.role !== "admin") {
     document.getElementById("addProjectBtn").style.display = "none";
   }
+
+  // Set logged-in user email
+  document.getElementById("userEmail").innerText = user.email;
+
   renderProjects();
 };
+
+// Logout
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "index.html";
+}
 </script>
+
+<script type="module" src="js/project.js"></script>
 
 </body>
 </html>

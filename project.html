@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Details</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/project.js"></script>
+</head>
+<body>
+
+<div class="main-container">
+  <h1 id="projectTitle"></h1>
+
+  <div class="tabs">
+    <button onclick="openTab('onpage')">On-Page</button>
+    <button onclick="openTab('offpage')">Off-Page</button>
+    <button onclick="openTab('content')">Website Content</button>
+    <button onclick="openTab('blogs')">Blogs</button>
+    <button onclick="openTab('general')">General</button>
+    <button onclick="openTab('stats')">Stats</button>
+  </div>
+
+  <div id="tabContent"></div>
+
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<script src="js/project.js"></script>
+</body>
+</html>

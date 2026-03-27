@@ -1,11 +1,24 @@
+/* ===== GLOBAL STYLES ===== */
 body {
   margin: 0;
   font-family: Arial;
+  background: #f5f7fa;
 }
 
+button {
+  padding: 10px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+/* ===== LOGIN PAGE ===== */
 .container {
   display: flex;
   height: 100vh;
+  padding: 0; /* override global padding */
 }
 
 .left-panel {
@@ -34,9 +47,35 @@ input {
   padding: 10px;
 }
 
-button {
-  padding: 10px;
-  background: blue;
-  color: white;
-  border: none;
+/* ===== DASHBOARD ===== */
+.project-card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+}
+
+.project-card:hover {
+  background: #eef2ff;
+}
+
+/* ===== TABS ===== */
+.tabs {
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  margin-right: 10px;
+  background: #e2e8f0;
+  color: #000;
+}
+
+.tabs button:hover {
+  background: #cbd5f5;
+}
+
+.main-container {
+  padding: 20px;
 }
